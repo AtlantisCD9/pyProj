@@ -1,5 +1,5 @@
 From = "python@163.com"
-To = "python@outlook.com"
+To = "python@163.com"
 #To = ['BBB@163.com','CCC@163.com']
 #file_name = "./pyMail.py"
 file_name = "./mail1.txt"
