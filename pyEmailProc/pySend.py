@@ -6,12 +6,13 @@ import os.path
 import smtplib
 import mailConfig
 
-if __name__ == '__main__':
+def sendMail(fileName):
     fromAddr = mailConfig.From
     toAddrs = mailConfig.To
     mail_subject = 'smtplib test'
     mail_content = 'smtplib test: hello, smtplib ! Can you see it ?'
-    file_name = mailConfig.file_name
+    #file_name = mailConfig.file_name
+    file_name = fileName
 
     #仅smtp服务器需要验证时
     server = smtplib.SMTP(mailConfig.smtp_server)
