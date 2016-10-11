@@ -3,17 +3,17 @@ import poplib
 import email
 import mailConfig
 
-if __name__ == '__main__':
+def receiveMail():
     M = poplib.POP3(mailConfig.pop_server)
     M.user(mailConfig.username)
     M.pass_(mailConfig.password)
 
     #打印有多少封信
     numMessages = len(M.list()[1])
-    print 'num of messages', numMessages
+#    print 'num of messages', numMessages
 
     i = numMessages - 1
-    #从最老的邮件开始遍历
+    #从最老的邮件开始遍历 1
 #    for i in range(numMessages):
     m = M.retr(i+1)
     msg = email.message_from_string('\n'.join(m[1]))
@@ -21,16 +21,21 @@ if __name__ == '__main__':
     aimHeaderStrs = {'from':'', 'to':'', 'subject':''}
     for aimKey in aimHeaderStrs.keys():
         aimHeaderList = email.Header.decode_header(msg[aimKey])
+#        print aimHeaderList
         for tmpTuple in aimHeaderList:
             if tmpTuple[1] == None:
                 aimHeaderStrs[aimKey] += tmpTuple[0]
             else:
                 aimHeaderStrs[aimKey] += tmpTuple[0].decode(tmpTuple[1]) #转成unicode
-            for aimKey in aimHeaderStrs.keys():
-                print aimKey,':',aimHeaderStrs[aimKey].encode('utf-8') #转成utf-8显示
+#    for aimKey in aimHeaderStrs.keys():
+#        print aimKey,':',aimHeaderStrs[aimKey].encode('utf-8') #转成utf-8显示
 
+    return aimHeaderStrs['subject']
+
+'''
     for part in msg.walk(): #遍历所有payload
         contenttype = part.get_content_type()
+#        print contenttype
         filename = part.get_filename()
         if filename: #and contenttype=='application/octet-stream':
             #保存附件
@@ -41,3 +46,4 @@ if __name__ == '__main__':
             data = part.get_payload(decode=True)
             charset = part.get_content_charset('ios-8859-1')
             file('./receivedFiles/mail%d.txt' % (i+1), 'w').write(data.decode(charset).encode('utf-8'))
+'''
