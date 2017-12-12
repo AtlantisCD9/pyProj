@@ -10,7 +10,8 @@ BUFF_SIZE = 10240
 
 def main(conn):
 	c = conn.cursor()
-	for root, dirs, files in os.walk(ENTRY):
+	dirPath = os.path.abspath(ENTRY)
+	for root, dirs, files in os.walk(dirPath):
 		for file in files:
 			fullPathName = os.path.join(root, file)
 			if os.path.islink(fullPathName):
@@ -18,11 +19,13 @@ def main(conn):
 
 			#print fullPathName
 			md5 = getFileMd5(fullPathName)
+			print md5
 
 			fullPathName = fullPathName.replace("'", "''")
 			sqlStr = "INSERT INTO file_md5 (md5, path_name) VALUES ('{0}', '{1}')"
 
 			c.execute(sqlStr.format(md5, fullPathName))
+		print 'commit'
 		conn.commit()
 
 
