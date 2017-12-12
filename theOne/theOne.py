@@ -73,7 +73,7 @@ def dumpFile(conn):
 	c = conn.cursor()
 
 	sqlStr ='''SELECT md5, path_name FROM file_md5 WHERE md5 IN(
-	SELECT md5 FROM file_md5 GROUP BY md5 HAVING COUNT(*) > 0
+	SELECT md5 FROM file_md5 GROUP BY md5 HAVING COUNT(*) > 1
 	) ORDER BY md5, path_name'''
 
 	for row in c.execute(sqlStr):
