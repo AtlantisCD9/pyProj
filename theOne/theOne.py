@@ -67,10 +67,25 @@ def initDB(conn):
 	# Save (commit) the changes
 	conn.commit()
 
+def dumpFile(conn):
+	fd=open("dumpFile",'wb')
+
+	c = conn.cursor()
+
+	sqlStr ='''SELECT md5, path_name FROM file_md5 WHERE md5 IN(
+	SELECT md5 FROM file_md5 GROUP BY md5 HAVING COUNT(*) > 0
+	) ORDER BY md5, path_name'''
+
+	for row in c.execute(sqlStr):
+		content = ' rm '.join(row)
+		fd.write(content)
+		fd.write("\n")
+
 
 if __name__ == "__main__":
 	conn = openDB()
 	initDB(conn)
 	main(conn)
+	dumpFile(conn)
 	closeDB(conn)
 
