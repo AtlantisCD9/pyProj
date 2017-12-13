@@ -4,8 +4,9 @@ import sqlite3
 
 
 ENTRY = "./"
-
 BUFF_SIZE = 10240
+DB_NAME = "myDB.db3"
+#DB_NAME = ":memory:"
 
 
 def main(conn):
@@ -46,7 +47,7 @@ def getFileMd5(fileName):
 
 
 def openDB():
-	conn = sqlite3.connect('myDB.db3')
+	conn = sqlite3.connect(DB_NAME)
 	return conn
 
 def closeDB(conn):
