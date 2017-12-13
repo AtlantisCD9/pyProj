@@ -1,6 +1,7 @@
 import os
 import hashlib
 import sqlite3
+import time
 
 
 ENTRY = "./"
@@ -84,9 +85,12 @@ def dumpFile(conn):
 
 
 if __name__ == "__main__":
+	start = time.clock()
 	conn = openDB()
 	initDB(conn)
 	main(conn)
 	dumpFile(conn)
 	closeDB(conn)
+	elapsed = (time.clock() - start)
+	print elapsed, 's'
 
