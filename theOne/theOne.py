@@ -80,7 +80,7 @@ def dumpFile(conn):
 
 	for row in c.execute(sqlStr):
 		content = ' rm '.join(row)
-		fd.write(content)
+		fd.write(content.encode('utf-8'))
 		fd.write("\n")
 
 
