@@ -79,10 +79,29 @@ def dumpFile(conn):
 	) ORDER BY md5, path_name'''
 
 	for row in c.execute(sqlStr):
-		content = ' rm '.join(row)
+		content = ' rm "'.join(row)
+		content += '"'
 		fd.write(content.encode('utf-8'))
 		fd.write("\n")
 
+def dumpFileFilter(conn):
+	fd=open("dumpFileFilter",'wb')
+
+	c = conn.cursor()
+
+	sqlStr ='''SELECT md5, path_name FROM file_md5 WHERE md5 IN(
+	SELECT md5 FROM file_md5 GROUP BY md5 HAVING COUNT(*) > 1
+	) ORDER BY md5, path_name'''
+
+	tmp = ""
+	for row in c.execute(sqlStr):
+		if row[0] == tmp:
+			content = 'rm "' + row[1] + '"'
+			fd.write(content.encode('utf-8'))
+			fd.write("\n")
+		else:
+			tmp = row[0]
+			continue
 
 if __name__ == "__main__":
 	start = time.clock()
@@ -90,7 +109,7 @@ if __name__ == "__main__":
 	initDB(conn)
 	main(conn)
 	dumpFile(conn)
+	dumpFileFilter(conn)
 	closeDB(conn)
 	elapsed = (time.clock() - start)
 	print elapsed, 's'
-
